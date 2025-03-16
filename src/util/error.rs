@@ -3,9 +3,20 @@ use serde_json::json;
 
 #[derive(Debug)]
 pub enum AppError {
+    // 服务配置
     ConfigError,
 
+    // 鉴权
     InvalidToken,
+    CaptchaImageValueError,
+
+    // sql
+    UserNotExist,
+    UserPasswordError,
+    UserNameExist,
+    UserEmailExist,
+    UserPasswordShort,
+    CaptchaEmailValueError,
 }
 
 impl std::fmt::Display for AppError {
@@ -25,6 +36,15 @@ impl IntoResponse for AppError {
         let (status_code, code, message) = match self {
             AppError::ConfigError => (StatusCode::RANGE_NOT_SATISFIABLE, 10001, "服务配置文件错误"),
             AppError::InvalidToken => (StatusCode::INTERNAL_SERVER_ERROR, 2001, "token 错误"),
+            AppError::CaptchaImageValueError => {
+                (StatusCode::BAD_REQUEST, 2002, "图形验证码输入错误")
+            }
+            AppError::UserNotExist => (StatusCode::BAD_REQUEST, 3001, "没有该用户"),
+            AppError::UserPasswordError => (StatusCode::BAD_REQUEST, 3002, "用户密码错误"),
+            AppError::UserNameExist => (StatusCode::BAD_REQUEST, 3003, "用户名已存在"),
+            AppError::UserEmailExist => (StatusCode::BAD_REQUEST, 3003, "邮箱已注册"),
+            AppError::UserPasswordShort => (StatusCode::BAD_REQUEST, 3004, "密码至少八位"),
+            AppError::CaptchaEmailValueError => (StatusCode::BAD_REQUEST, 3004, "验邮箱证码错误"),
         };
         let body = Json(json!({
             "code": code,

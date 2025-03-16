@@ -1,8 +1,9 @@
-use util::config::CONFIG;
-
 mod model;
 mod route;
+mod sql;
 mod util;
+
+use util::config::CONFIG;
 
 #[tokio::main]
 async fn main() {
@@ -14,6 +15,6 @@ async fn main() {
         .await
         .expect("address bind error");
     let router = route::init();
-    tracing::info!("server is running in http://{}", address);
+    tracing::info!("Server start: http://{}", address);
     axum::serve(listener, router).await.expect("app run error")
 }

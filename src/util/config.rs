@@ -15,6 +15,11 @@ pub struct Database {
 }
 
 #[derive(Debug, Deserialize)]
+pub struct Redis {
+    pub url: String,
+}
+
+#[derive(Debug, Deserialize)]
 pub struct Logger {
     pub level: String,
 }
@@ -22,14 +27,15 @@ pub struct Logger {
 #[derive(Debug, Deserialize)]
 pub struct Auth {
     pub secret: String,
-    pub access_token_duration: u8,
-    pub refresh_token_duration: u8,
+    pub access_token_duration: i64,
+    pub refresh_token_duration: i64,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Config {
     pub server: Server,
     pub database: Database,
+    pub redis: Redis,
     pub logger: Logger,
     pub auth: Auth,
 }

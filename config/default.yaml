@@ -1,8 +1,8 @@
 server: 
   port: 8000
 
-databse:
-  url: "123456"
+database:
+  url: "postgresql://root:123456@localhost:5432/database"
 
 logger:
   level: "debug"
