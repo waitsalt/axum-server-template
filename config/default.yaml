@@ -1,0 +1,13 @@
+server: 
+  port: 8000
+
+databse:
+  url: "123456"
+
+logger:
+  level: "debug"
+
+auth:
+  secret: "123456"
+  access_token_duration: 15
+  refresh_token_duration: 30
