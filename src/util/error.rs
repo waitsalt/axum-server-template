@@ -17,6 +17,9 @@ pub enum AppError {
     UserEmailExist,
     UserPasswordShort,
     CaptchaEmailValueError,
+
+    // other
+    EmailSendFail,
 }
 
 impl std::fmt::Display for AppError {
@@ -45,6 +48,7 @@ impl IntoResponse for AppError {
             AppError::UserEmailExist => (StatusCode::BAD_REQUEST, 3003, "邮箱已注册"),
             AppError::UserPasswordShort => (StatusCode::BAD_REQUEST, 3004, "密码至少八位"),
             AppError::CaptchaEmailValueError => (StatusCode::BAD_REQUEST, 3004, "验邮箱证码错误"),
+            AppError::EmailSendFail => (StatusCode::SERVICE_UNAVAILABLE, 4001, "邮件发送失败"),
         };
         let body = Json(json!({
             "code": code,

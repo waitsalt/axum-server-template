@@ -4,6 +4,9 @@ server:
 database:
   url: "postgresql://root:123456@localhost:5432/database"
 
+redis:
+    url: "redis://127.0.0.1/"
+
 logger:
   level: "debug"
 

@@ -48,6 +48,23 @@ pub async fn user_info_get_by_name(pool: &Pool<Postgres>, name: &str) -> SqlResu
     }
 }
 
+pub async fn user_search_by_name(pool: &Pool<Postgres>, name: &str) -> SqlResult<Vec<User>> {
+    let sql = "
+    select
+        *
+    from
+        \"user\"
+    where
+        name like '%$1%'";
+
+    let users: Vec<User> = sqlx::query_as(sql)
+        .bind(name)
+        .fetch_all(pool)
+        .await
+        .unwrap();
+    Ok(users)
+}
+
 pub async fn user_name_is_exist(pool: &Pool<Postgres>, name: &str) -> SqlResult<()> {
     let sql = "
     select 
@@ -78,6 +95,26 @@ pub async fn user_email_is_exist(pool: &Pool<Postgres>, email: &str) -> SqlResul
             email = $1;";
     let affected_row = sqlx::query(sql)
         .bind(email)
+        .execute(pool)
+        .await
+        .unwrap()
+        .rows_affected();
+    if affected_row != 0 {
+        return Err(AppError::UserEmailExist);
+    }
+    Ok(())
+}
+
+pub async fn user_phone_is_exist(pool: &Pool<Postgres>, phone: &str) -> SqlResult<()> {
+    let sql = "
+        select 
+            id
+        from
+            \"user\"
+        where
+            phone = $1;";
+    let affected_row = sqlx::query(sql)
+        .bind(phone)
         .execute(pool)
         .await
         .unwrap()

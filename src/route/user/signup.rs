@@ -27,26 +27,26 @@ pub async fn signup(Json(user_signup_payload): Json<UserSignupPayload>) -> AppRe
         .unwrap();
 
     // 验证邮箱验证码
-    // let mut con = redis_connect();
+    let mut con = redis_connect();
 
-    // let captcha_email_key = format!("captcha_email_key:{}", user_signup_payload.email);
-    // let captcha_email_value: String = match redis::cmd("GET")
-    //     .arg(captcha_email_key.clone())
-    //     .query(&mut con)
-    // {
-    //     Ok(captcha_email) => captcha_email,
-    //     Err(_) => "".to_string(),
-    // };
+    let captcha_email_key = format!("captcha_email_key:{}", user_signup_payload.email);
+    let captcha_email_value: String = match redis::cmd("GET")
+        .arg(captcha_email_key.clone())
+        .query(&mut con)
+    {
+        Ok(captcha_email) => captcha_email,
+        Err(_) => "".to_string(),
+    };
 
-    // if captcha_email_value != user_signup_payload.captcha_email {
-    //     return Err(AppError::CaptchaEmailValueError);
-    // }
+    if captcha_email_value != user_signup_payload.captcha_email {
+        return Err(AppError::CaptchaEmailValueError);
+    }
 
     // 邮箱验证码使用后失效
-    // let _: () = redis::cmd("DEL")
-    //     .arg(captcha_email_key)
-    //     .query(&mut con)
-    //     .unwrap();
+    let _: () = redis::cmd("DEL")
+        .arg(captcha_email_key)
+        .query(&mut con)
+        .unwrap();
 
     // 新建用户
     sql::user::user_create(

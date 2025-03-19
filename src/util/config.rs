@@ -32,18 +32,28 @@ pub struct Auth {
 }
 
 #[derive(Debug, Deserialize)]
+pub struct Email {
+    pub username: String,
+    pub password: String,
+    pub host: String,
+    pub port: u16,
+}
+
+#[derive(Debug, Deserialize)]
 pub struct Config {
     pub server: Server,
     pub database: Database,
     pub redis: Redis,
     pub logger: Logger,
     pub auth: Auth,
+    pub email: Email,
 }
 
 impl Config {
     pub fn init() -> Result<Self, config::ConfigError> {
         let mut builder = config::Config::builder()
             .add_source(config::File::with_name("config/default"))
+            .add_source(config::File::with_name("config/mine"))
             .add_source(config::Environment::default().separator("_"));
         if let Ok(port) = env::var("PORT") {
             builder = builder.set_override("server.port", port)?;
