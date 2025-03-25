@@ -32,11 +32,22 @@ pub async fn captcha_email(user_email: &str) -> Result<(), AppError> {
         .unwrap();
     let creds = Credentials::new(email_send.to_owned(), password.to_owned());
 
-    let mailer = SmtpTransport::relay(&host)
-        .unwrap()
-        .port(port)
-        .credentials(creds)
-        .build();
+    let mailer = match CONFIG.email.secure.as_str() {
+        "tls" => SmtpTransport::relay(&host)
+            .unwrap()
+            .port(port)
+            .credentials(creds)
+            .build(),
+        "starttls" => SmtpTransport::starttls_relay(&host)
+            .unwrap()
+            .port(port)
+            .credentials(creds)
+            .build(),
+        _ => {
+            return Err(AppError::EmailSendFail);
+        }
+    };
+
     match mailer.send(&message) {
         Ok(_) => return Ok(()),
         Err(_) => return Err(AppError::EmailSendFail),

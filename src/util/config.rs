@@ -35,6 +35,7 @@ pub struct Auth {
 pub struct Email {
     pub username: String,
     pub password: String,
+    pub secure: String,
     pub host: String,
     pub port: u16,
 }
