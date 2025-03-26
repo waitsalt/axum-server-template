@@ -15,7 +15,7 @@ use crate::{
     },
 };
 
-pub async fn signin(Json(user_signin_payload): Json<UserSigninPayload>) -> AppResult<UserAuth> {
+pub async fn login(Json(user_signin_payload): Json<UserSigninPayload>) -> AppResult<UserAuth> {
     let mut con = redis_connect();
 
     let captcha_image_key = format!(

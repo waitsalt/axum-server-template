@@ -1,5 +1,6 @@
 mod model;
 mod route;
+mod service;
 mod sql;
 mod util;
 

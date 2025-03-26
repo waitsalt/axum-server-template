@@ -9,7 +9,7 @@ use crate::{
     },
 };
 
-pub async fn signup(Json(user_signup_payload): Json<UserSignupPayload>) -> AppResult<()> {
+pub async fn create(Json(user_signup_payload): Json<UserSignupPayload>) -> AppResult<()> {
     // 检查密码
     if user_signup_payload.password.len() < 8 {
         return Err(AppError::UserPasswordShort);

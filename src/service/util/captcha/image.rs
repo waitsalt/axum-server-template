@@ -4,7 +4,7 @@ use redis::Commands;
 
 use crate::util::{AppResult, redis::redis_connect, response::AppResponse};
 
-pub async fn captcha_image(Path(captcha_image_key): Path<String>) -> AppResult<String> {
+pub async fn image(Path(captcha_image_key): Path<String>) -> AppResult<String> {
     let captcha = Captcha::new(5, 100, 40);
     let mut con = redis_connect();
     let captcha_image_key = format!("captcha_image_key:{}", captcha_image_key);

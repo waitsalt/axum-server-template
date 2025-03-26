@@ -3,7 +3,7 @@ use crate::{
     util::{AppResult, redis::redis_connect, response::AppResponse},
 };
 
-pub async fn signout(user_refresh_claim: UserRefreshClaim) -> AppResult<()> {
+pub async fn logout(user_refresh_claim: UserRefreshClaim) -> AppResult<()> {
     let mut con = redis_connect();
 
     println!("{:?}", user_refresh_claim);
