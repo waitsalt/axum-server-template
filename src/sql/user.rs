@@ -6,10 +6,10 @@ pub async fn user_info_get_by_id(pool: &Pool<Postgres>, id: &i32) -> SqlResult<U
     let sql = "
     select
         *
-    from 
+    from
         \"user\"
     where
-        id = $1;";
+        id = $1";
     let res: Option<User> = sqlx::query_as(sql)
         .bind(id)
         .fetch_optional(pool)
@@ -29,10 +29,10 @@ pub async fn user_info_get_by_name(pool: &Pool<Postgres>, name: &str) -> SqlResu
     let sql = "
     select
         *
-    from 
+    from
         \"user\"
     where
-        name = $1;";
+        name = $1";
     let res: Option<User> = sqlx::query_as(sql)
         .bind(name)
         .fetch_optional(pool)
@@ -67,12 +67,12 @@ pub async fn user_search_by_name(pool: &Pool<Postgres>, name: &str) -> SqlResult
 
 pub async fn user_name_is_exist(pool: &Pool<Postgres>, name: &str) -> SqlResult<()> {
     let sql = "
-    select 
+    select
         id
     from
         \"user\"
     where
-        name = $1;";
+        name = $1";
     let affected_row = sqlx::query(sql)
         .bind(name)
         .execute(pool)
@@ -87,12 +87,12 @@ pub async fn user_name_is_exist(pool: &Pool<Postgres>, name: &str) -> SqlResult<
 
 pub async fn user_email_is_exist(pool: &Pool<Postgres>, email: &str) -> SqlResult<()> {
     let sql = "
-        select 
+        select
             id
         from
             \"user\"
         where
-            email = $1;";
+            email = $1";
     let affected_row = sqlx::query(sql)
         .bind(email)
         .execute(pool)
@@ -107,12 +107,12 @@ pub async fn user_email_is_exist(pool: &Pool<Postgres>, email: &str) -> SqlResul
 
 pub async fn user_phone_is_exist(pool: &Pool<Postgres>, phone: &str) -> SqlResult<()> {
     let sql = "
-        select 
+        select
             id
         from
             \"user\"
         where
-            phone = $1;";
+            phone = $1";
     let affected_row = sqlx::query(sql)
         .bind(phone)
         .execute(pool)
@@ -136,7 +136,7 @@ pub async fn user_create(
     insert into
         \"user\" (name, password, email, avatar_url)
     values
-        ($1,$2,$3,$4);";
+        ($1,$2,$3,$4)";
     let _affected_row = sqlx::query(sql)
         .bind(name)
         .bind(password)
@@ -157,7 +157,7 @@ pub async fn user_delete(pool: &Pool<Postgres>, id: &i32) -> SqlResult<()> {
     set
         status = 2
     where
-        id = $1;";
+        id = $1";
     let _ = sqlx::query(sql).bind(id).execute(pool).await.unwrap();
     Ok(())
 }
@@ -167,7 +167,7 @@ pub async fn user_all(pool: &Pool<Postgres>) -> SqlResult<Vec<User>> {
     select
         *
     from
-        \"user\";";
+        \"user\"";
 
     let users: Vec<User> = sqlx::query_as(sql).fetch_all(pool).await.unwrap();
     Ok(users)

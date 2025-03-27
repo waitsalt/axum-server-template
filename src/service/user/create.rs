@@ -11,25 +11,25 @@ use crate::{
 
 pub async fn create(Json(user_signup_payload): Json<UserSignupPayload>) -> AppResult<()> {
     // 检查密码
-    if user_signup_payload.password.len() < 8 {
+    if user_signup_payload.user_password.len() < 8 {
         return Err(AppError::UserPasswordShort);
     }
 
     let pool = database_connect();
     // 查询用户名是否存在
-    sql::user::user_name_is_exist(pool, &user_signup_payload.name)
+    sql::user::user_name_is_exist(pool, &user_signup_payload.user_name)
         .await
         .unwrap();
 
     // 查询用户邮箱是否存在
-    sql::user::user_email_is_exist(pool, &user_signup_payload.email)
+    sql::user::user_email_is_exist(pool, &user_signup_payload.user_email)
         .await
         .unwrap();
 
     // 验证邮箱验证码
     let mut con = redis_connect();
 
-    let captcha_email_key = format!("captcha_email_key:{}", user_signup_payload.email);
+    let captcha_email_key = format!("captcha_email_key:{}", user_signup_payload.user_email);
     let captcha_email_value: String = match redis::cmd("GET")
         .arg(captcha_email_key.clone())
         .query(&mut con)
@@ -51,10 +51,10 @@ pub async fn create(Json(user_signup_payload): Json<UserSignupPayload>) -> AppRe
     // 新建用户
     sql::user::user_create(
         pool,
-        &user_signup_payload.name,
-        &user_signup_payload.password,
-        &user_signup_payload.email,
-        &user_signup_payload.avatar_url,
+        &user_signup_payload.user_name,
+        &user_signup_payload.user_password,
+        &user_signup_payload.user_email,
+        &user_signup_payload.user_avatar_url,
     )
     .await?;
 

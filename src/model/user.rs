@@ -5,47 +5,47 @@ use crate::util::config::CONFIG;
 
 #[derive(Debug, Deserialize, Clone, sqlx::FromRow)]
 pub struct User {
-    pub id: i32,
-    pub name: String,
-    pub desc: String,
-    pub password: String,
-    pub email: String,
-    pub avatar_url: String, // 头像 url
-    pub level: i16,         // 0
-    pub status: i16,        // 0. 正常 1. 被封禁 2. 删除
-    pub identity: i16,      // 0. 普通 1. 管理员 2. 超级管理员
-    pub create_time: DateTime<Utc>,
-    pub update_time: DateTime<Utc>,
+    pub user_id: i64,
+    pub user_name: String,
+    pub user_desc: String,
+    pub user_password: String,
+    pub user_email: String,
+    pub user_avatar_url: String, // 头像 url
+    pub user_level: i8,          // 0
+    pub user_status: i8,         // 0. 正常 1. 被封禁 2. 删除
+    pub user_identity: i8,       // 0. 普通 1. 管理员 2. 超级管理员
+    pub user_create_time: DateTime<Utc>,
+    pub user_update_time: DateTime<Utc>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct UserPublic {
-    pub id: i32,
-    pub name: String,
-    pub desc: String,
-    pub email: String,
-    pub avatar_url: String, // 头像 url
-    pub level: i16,         // 0
-    pub status: i16,        // 0. 正常 1. 被封禁 2. 删除
-    pub identity: i16,      // 0. 普通 1. 管理员 2. 超级管理员
-    pub create_time: DateTime<Utc>,
-    pub update_time: DateTime<Utc>,
+    pub user_id: i64,
+    pub user_name: String,
+    pub user_desc: String,
+    pub user_email: String,
+    pub user_avatar_url: String, // 头像 url
+    pub user_level: i8,          // 0
+    pub user_status: i8,         // 0. 正常 1. 被封禁 2. 删除
+    pub user_identity: i8,       // 0. 普通 1. 管理员 2. 超级管理员
+    pub user_create_time: DateTime<Utc>,
+    pub user_update_time: DateTime<Utc>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct UserSigninPayload {
-    pub name: String,
-    pub password: String,
+    pub user_name: String,
+    pub user_password: String,
     pub captcha_image_key: String,
     pub captcha_image_value: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct UserSignupPayload {
-    pub name: String,
-    pub password: String,
-    pub email: String,
-    pub avatar_url: String,
+    pub user_name: String,
+    pub user_password: String,
+    pub user_email: String,
+    pub user_avatar_url: String,
     pub captcha_email: String,
     pub captcha_image_key: String,
     pub captcha_image_value: String,
@@ -62,7 +62,7 @@ pub struct UserClaim {
 pub struct UserRefreshClaim {
     pub iat: i64,
     pub exp: i64,
-    pub data: i32,
+    pub data: i64,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -75,16 +75,16 @@ impl UserPublic {
     pub fn from(user: User) -> Self {
         let user = user.clone();
         Self {
-            id: user.id,
-            name: user.name,
-            desc: user.desc,
-            email: user.email,
-            avatar_url: user.avatar_url,
-            level: user.level,
-            status: user.status,
-            identity: user.identity,
-            create_time: user.create_time,
-            update_time: user.update_time,
+            user_id: user.user_id,
+            user_name: user.user_name,
+            user_desc: user.user_desc,
+            user_email: user.user_email,
+            user_avatar_url: user.user_avatar_url,
+            user_level: user.user_level,
+            user_status: user.user_status,
+            user_identity: user.user_identity,
+            user_create_time: user.user_create_time,
+            user_update_time: user.user_update_time,
         }
     }
 }
@@ -112,7 +112,7 @@ impl UserRefreshClaim {
         Self {
             iat: start_time.timestamp_millis(),
             exp: end_time.timestamp_millis(),
-            data: user.id,
+            data: user.user_id,
         }
     }
 }
@@ -120,8 +120,8 @@ impl UserRefreshClaim {
 impl UserAuth {
     pub fn new(access_token: String, refresh_token: String) -> Self {
         Self {
-            access_token: access_token,
-            refresh_token: refresh_token,
+            access_token,
+            refresh_token,
         }
     }
 }

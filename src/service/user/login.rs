@@ -30,11 +30,11 @@ pub async fn login(Json(user_signin_payload): Json<UserSigninPayload>) -> AppRes
 
     let pool = database_connect();
 
-    let user = sql::user::user_info_get_by_name(pool, &user_signin_payload.name)
+    let user = sql::user::user_info_get_by_name(pool, &user_signin_payload.user_name)
         .await
         .unwrap();
 
-    if user.password != user_signin_payload.password {
+    if user.user_password != user_signin_payload.user_password {
         return Err(AppError::UserPasswordError);
     }
     auth(user)
@@ -43,7 +43,7 @@ pub async fn login(Json(user_signin_payload): Json<UserSigninPayload>) -> AppRes
 fn auth(user: User) -> AppResult<UserAuth> {
     let mut con = redis_connect();
 
-    let refresh_token_key = format!("refresh_token:{}", user.id);
+    let refresh_token_key = format!("refresh_token:{}", user.user_id);
 
     let refresh_token: String = match redis::cmd("GET")
         .arg(refresh_token_key.clone())

@@ -1,3 +1,4 @@
+mod comment;
 mod user;
 mod util;
 
