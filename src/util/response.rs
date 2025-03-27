@@ -9,6 +9,14 @@ pub struct AppResponse<T> {
 }
 
 impl<T: DeserializeOwned + Serialize> AppResponse<T> {
+    pub fn new(code: u16, message: String, data: Option<T>) -> Self {
+        Self {
+            code,
+            message,
+            data,
+        }
+    }
+
     pub fn from(message: &str, data: Option<T>) -> Self {
         Self {
             code: 200,
