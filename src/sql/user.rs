@@ -2,7 +2,7 @@ use sqlx::{Pool, Postgres};
 
 use crate::{model::user::User, sql::SqlResult, util::error::AppError};
 
-pub async fn user_info_get_by_id(pool: &Pool<Postgres>, id: &i32) -> SqlResult<User> {
+pub async fn user_info_get_by_id(pool: &Pool<Postgres>, id: &i64) -> SqlResult<User> {
     let sql = "
     select
         *
@@ -150,7 +150,7 @@ pub async fn user_create(
     Ok(())
 }
 
-pub async fn user_delete(pool: &Pool<Postgres>, id: &i32) -> SqlResult<()> {
+pub async fn user_delete(pool: &Pool<Postgres>, id: &i64) -> SqlResult<()> {
     let sql = "
     upadte
         \"user\"

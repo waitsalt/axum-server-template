@@ -8,8 +8,5 @@ pub fn init() -> Router {
             "/captcha_email/{user_email}",
             get(service::util::captcha::email),
         )
-        .route(
-            "/captcha_image/{captcha_image_key}",
-            get(service::util::captcha::image),
-        )
+        .route("/captcha_image", get(service::util::captcha::image))
 }

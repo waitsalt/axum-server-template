@@ -52,6 +52,11 @@ pub struct UserSignupPayload {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+pub struct UserSearchPayload {
+    pub keyword: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 pub struct UserClaim {
     pub iat: i64,
     pub exp: i64,
@@ -62,7 +67,7 @@ pub struct UserClaim {
 pub struct UserRefreshClaim {
     pub iat: i64,
     pub exp: i64,
-    pub data: i64,
+    pub data: String,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -104,15 +109,14 @@ impl UserClaim {
 }
 
 impl UserRefreshClaim {
-    pub fn from(user: User) -> Self {
-        let user = user.clone();
+    pub fn new(data: &str) -> Self {
         let duration = CONFIG.auth.refresh_token_duration;
         let start_time = Utc::now();
         let end_time = start_time + Duration::days(duration);
         Self {
             iat: start_time.timestamp_millis(),
             exp: end_time.timestamp_millis(),
-            data: user.user_id,
+            data: data.to_string(),
         }
     }
 }

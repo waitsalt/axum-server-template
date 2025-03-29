@@ -20,6 +20,7 @@ pub enum AppError {
 
     // other
     EmailSendFail,
+    Other,
 }
 
 impl std::fmt::Display for AppError {
@@ -49,6 +50,8 @@ impl IntoResponse for AppError {
             AppError::UserPasswordShort => (StatusCode::BAD_REQUEST, 3004, "密码至少八位"),
             AppError::CaptchaEmailValueError => (StatusCode::BAD_REQUEST, 3004, "验邮箱证码错误"),
             AppError::EmailSendFail => (StatusCode::SERVICE_UNAVAILABLE, 4001, "邮件发送失败"),
+
+            AppError::Other => (StatusCode::FORBIDDEN, 5000, "未知错误"),
         };
         let body = Json(json!({
             "code": code,
