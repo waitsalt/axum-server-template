@@ -15,6 +15,7 @@ pub enum AppError {
     UserPasswordError,
     UserNameExist,
     UserEmailExist,
+    UserPhoneExist,
     UserPasswordShort,
     CaptchaEmailValueError,
 
@@ -43,10 +44,11 @@ impl IntoResponse for AppError {
             AppError::CaptchaImageValueError => {
                 (StatusCode::BAD_REQUEST, 2002, "图形验证码输入错误")
             }
-            AppError::UserNotExist => (StatusCode::BAD_REQUEST, 3001, "没有该用户"),
+            AppError::UserNotExist => (StatusCode::FORBIDDEN, 3001, "没有该用户"),
             AppError::UserPasswordError => (StatusCode::BAD_REQUEST, 3002, "用户密码错误"),
             AppError::UserNameExist => (StatusCode::BAD_REQUEST, 3003, "用户名已存在"),
             AppError::UserEmailExist => (StatusCode::BAD_REQUEST, 3003, "邮箱已注册"),
+            AppError::UserPhoneExist => (StatusCode::BAD_REQUEST, 3003, "手机号已注册"),
             AppError::UserPasswordShort => (StatusCode::BAD_REQUEST, 3004, "密码至少八位"),
             AppError::CaptchaEmailValueError => (StatusCode::BAD_REQUEST, 3004, "验邮箱证码错误"),
             AppError::EmailSendFail => (StatusCode::SERVICE_UNAVAILABLE, 4001, "邮件发送失败"),

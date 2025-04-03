@@ -14,7 +14,7 @@ pub fn init() -> Router {
     let cors = CorsLayer::new()
         .allow_origin(Any)
         .allow_methods(Any)
-        .allow_methods(Any);
+        .allow_headers(Any);
     Router::new()
         .nest("/api/user", user_router)
         .nest("/api/util", util_router)

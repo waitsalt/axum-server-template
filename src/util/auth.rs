@@ -29,12 +29,14 @@ impl Keys {
 }
 
 pub fn sign(user_claim: UserClaim) -> Result<String, AppError> {
-    let token = encode(&Header::default(), &user_claim, &KEYS.encoding).unwrap();
+    let token = encode(&Header::default(), &user_claim, &KEYS.encoding)
+        .map_err(|_| AppError::InvalidToken)?;
     Ok(token)
 }
 
 pub fn sign_resfresh(user_refresh_claim: UserRefreshClaim) -> Result<String, AppError> {
-    let token = encode(&Header::default(), &user_refresh_claim, &KEYS.encoding).unwrap();
+    let token = encode(&Header::default(), &user_refresh_claim, &KEYS.encoding)
+        .map_err(|_| AppError::InvalidToken)?;
     Ok(token)
 }
 

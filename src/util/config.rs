@@ -6,6 +6,7 @@ pub static CONFIG: Lazy<Config> = Lazy::new(|| Config::init().expect("config fil
 
 #[derive(Debug, Deserialize)]
 pub struct Server {
+    pub name: String,
     pub port: u16,
 }
 

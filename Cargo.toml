@@ -4,7 +4,6 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-# anyhow = "1.0.97"
 axum = { version = "0.8.1", features = ["multipart"] }
 axum-extra = { version = "0.10.0", features = ["typed-header"] }
 captcha_rust = "0.1.3"
